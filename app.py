@@ -66,14 +66,14 @@ def user():
                 collection.close()
     
 
-@app.route("/user/<int:id>/",methods=['GET','DELETE','PUT'])
+@app.route("/user/<int:id>",methods=['GET','DELETE','PUT'])
 def user_id(id):
     if request.method == 'GET':
         try:
             collection=get_db()
-            user_data=collection.find({"id":id})
+            user_data=collection.find({'id':id})
             if len(list(user_data)):
-                data=collection.insert_one({"id": id}).inserted_id
+                data=collection.find({'id':id})
                 data=dumps(list(data),indent = 2)
                 data=json.loads(data)
                 return jsonify(data),200
@@ -83,6 +83,7 @@ def user_id(id):
         finally:
             if type(collection)==MongoClient:
                 collection.close()
+        
     
     if request.method == 'PUT':
         try:
